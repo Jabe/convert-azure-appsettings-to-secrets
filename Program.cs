@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 var appSettings = new List<Setting>();
 var connectionStrings = new List<Setting>();
 
+var options = new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = true };
 
 Console.WriteLine("Convert Settings to secrets.json. End input with newlines.");
 Console.WriteLine();
@@ -22,7 +23,7 @@ if (JsonSerializer.Deserialize<ConnectionString[]>(ReadAll()) is var b && b is n
 
 var values = appSettings.Concat(connectionStrings).Cast<Setting>().ToDictionary(x => ConvertName(x), x => x.Value);
 
-var data = JsonSerializer.Serialize(values, options: new() { WriteIndented = true });
+var data = JsonSerializer.Serialize(values, options);
 Console.WriteLine(data);
 
 
